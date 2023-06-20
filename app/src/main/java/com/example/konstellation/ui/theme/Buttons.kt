@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,8 +22,10 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -61,30 +64,34 @@ fun TopButton(onClick: () -> Unit,modifier: Modifier=Modifier,text:String)
 fun AppButton(modifier: Modifier,onClick: () -> Unit,text: String,imageVector: ImageVector) {
     Box(modifier = modifier) {
         AppTheme() {
-            Column(Modifier.width(60.dp)) {
-                IconButton(
-                    modifier= Modifier
-                        .size(60.dp, 60.dp)
-                        .alpha(0.85f)
-                        .background(
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            shape = CircleShape
-                        ),
-                    onClick = onClick,
-                )
-                {
-                    Icon(
-                        imageVector = imageVector,
-                        contentDescription = "Matrix")
+                Box(Modifier.size(65.dp,75.dp)) {
+                    IconButton(
+                        modifier= Modifier
+                            .size(60.dp, 60.dp)
+                            .alpha(0.85f)
+                            .padding(2.dp)
+                            .align(Alignment.TopCenter)
+                            .shadow(2.dp, CircleShape)
+                            .background(
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                shape = CircleShape
+                            ),
+                        onClick = onClick,
+                    )
+                    {
+                        Icon(
+                            imageVector = imageVector,
+                            contentDescription = "Matrix")
+                    }
+                    Text(text = text,
+                        color= MaterialTheme.colorScheme.primary,
+                        fontSize = 10.sp,
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        textAlign = TextAlign.Center)
                 }
-                Text(text = text,
-                    color= MaterialTheme.colorScheme.primary,
-                    fontSize = 10.sp,
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(top=4.dp),
-                    textAlign = TextAlign.Center)
+
+
             }
-        }
     }
 
 }

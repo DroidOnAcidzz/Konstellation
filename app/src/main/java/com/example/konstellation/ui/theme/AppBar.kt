@@ -92,11 +92,13 @@ fun AppBarApps() {
         AppButtonMastodon()
         AppButtonMatrix()
         AppButtonPeertube()
+        AppButtonMixed()
+        AppButtonConstellation()
     }
 }
 @Composable
 fun AppButtonMatrix(){
-    AppButton(modifier = Modifier.padding(10.dp),
+    AppButton(modifier = Modifier,
         onClick = { /*TODO*/ },
         text = "Matrix",
         imageVector = ImageVector.vectorResource(
@@ -105,22 +107,35 @@ fun AppButtonMatrix(){
 
 @Composable
 fun AppButtonMastodon(){
-    AppButton(modifier = Modifier.padding(10.dp),
+    AppButton(modifier = Modifier,
         onClick = { /*TODO*/ },
         text = "Mastodon",
         imageVector = ImageVector.vectorResource(
             id = R.drawable.mastodon_icon ))
+}@Composable
+fun AppButtonConstellation(){
+    AppButton(modifier = Modifier,
+        onClick = { /*TODO*/ },
+        text = "Constellation",
+        imageVector = ImageVector.vectorResource(
+            id = R.drawable.constellation ))
 }
 @Composable
 fun AppButtonPeertube(){
-    AppButton(modifier = Modifier.padding(10.dp),
+    AppButton(modifier = Modifier,
         onClick = { /*TODO*/ },
         text = "Peertube",
         imageVector = ImageVector.vectorResource(
             id = R.drawable.peertube_icon ))
 }
-
-
+@Composable
+fun AppButtonMixed(){
+    AppButton(modifier = Modifier,
+        onClick = { /*TODO*/ },
+        text = "Mixed",
+        imageVector = ImageVector.vectorResource(
+            id = R.drawable.mixed ))
+}
 @Preview
 @Composable
 fun AppBarPreview() {

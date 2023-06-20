@@ -100,7 +100,7 @@ fun DrawConstellation(NumberOfStars:Int){
             val positions: MutableList<Offset> = mutableListOf()
             val width = size.width.toDouble()
             val height = size.height.toDouble()
-            var circleRadius = 150f
+            val circleRadius = 150f
             var previousOffset = generateRandomPosition(width, height)
             drawCircle(color = Color.White, center = previousOffset, radius = circleRadius)
             positions.add(previousOffset)
