@@ -97,73 +97,28 @@ fun DrawConstellation(NumberOfStars:Int){
         .fillMaxSize()
         .alpha(0.5f)
         .drawBehind {
-            val positions: MutableList<Offset> = mutableListOf()
-            val width = size.width.toDouble()
-            val height = size.height.toDouble()
-            val circleRadius = 150f
-            var previousOffset = generateRandomPosition(width, height)
-            drawCircle(color = Color.White, center = previousOffset, radius = circleRadius)
-            positions.add(previousOffset)
-            for (i in 1..NumberOfStars - 1) {
-                val nextOffset =
-                    checkDistanceBetweenStars(positions, circleRadius * 2.toDouble(), width, height)
-                drawCircle(color = Color.White, center = nextOffset, radius = circleRadius)
-                drawLine(
-                    strokeWidth = 5f,
-                    color = Color.White,
-                    start = previousOffset,
-                    end = nextOffset
-                )
-
-                previousOffset = nextOffset
-                positions.add(previousOffset)
-            }
+//            val positions: MutableList<Offset> = mutableListOf()
+//            val width = size.width.toDouble()
+//            val height = size.height.toDouble()
+//            val circleRadius = 150f
+//            var previousOffset = generateRandomPosition(width, height)
+//            drawCircle(color = Color.White, center = previousOffset, radius = circleRadius)
+//            positions.add(previousOffset)
+//            for (i in 1..NumberOfStars - 1) {
+//                val nextOffset =
+//                    checkDistanceBetweenStars(positions, circleRadius * 2.toDouble(), width, height)
+//                drawCircle(color = Color.White, center = nextOffset, radius = circleRadius)
+//                drawLine(
+//                    strokeWidth = 5f,
+//                    color = Color.White,
+//                    start = previousOffset,
+//                    end = nextOffset
+//                )
+//
+//                previousOffset = nextOffset
+//                positions.add(previousOffset)
+            })
         }
-    )
-}
-fun distanceBetweenStars(pos1:Offset,pos2:Offset):Double{
-    return hypot(pos2.x-pos1.x,pos2.y-pos1.y).toDouble()
-}
-fun generateRandomPosition(width:Double,height:Double):Offset
-{
-    val randomPositionX = kotlin.random.Random.nextDouble(
-        (width * 0.1f),
-        (width * 0.8f)
-    )
-    val randomPositionY = kotlin.random.Random.nextDouble(
-        (height * 0.2f),
-        (height * 0.8f)
-    )
-    return Offset(randomPositionX.toFloat(), randomPositionY.toFloat())
-}
-fun checkDistanceBetweenStars(positions:MutableList<Offset>,amountOfDistanceToCheck:Double,width: Double,height:Double):Offset{
-    var foundViablePosition = false
-    var position = generateRandomPosition(width,height)
-    if (positions.size>1)
-    {
-        while (!foundViablePosition)
-        {
-                var hasPositionAvailable = true
-                for (p in positions)
-                {
-                    if(distanceBetweenStars(position,p) <amountOfDistanceToCheck)
-                    {
-                        hasPositionAvailable=false
-                    }
-                }
-                if (hasPositionAvailable)
-                    foundViablePosition=true
-                else
-                    position = generateRandomPosition(width, height)
-        }
-        return position
-    }
-    else
-    {
-        return position
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable

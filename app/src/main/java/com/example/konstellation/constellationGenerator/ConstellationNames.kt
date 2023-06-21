@@ -1,7 +1,6 @@
 package com.example.konstellation.constellationGenerator
-
-class ConstellationNames {
-    val fakeConstellations = listOf(
+ class ConstellationNames {
+    private val fakeConstellations = listOf(
         "Luminoth", "Zephyrion", "Stardustria", "Celestoria", "Nebuloria",
         "Astralis", "Solara", "Galaxara", "Aetherion", "Cosmara",
         "Stellarion", "Lunaris", "Ignis", "Seraphia", "Sylvaria",
@@ -24,6 +23,6 @@ class ConstellationNames {
         "Astralis", "Nebularis", "Stellaris", "Luminara", "Astronova"
     )
     fun getRandomConstellationName():String{
-        return fakeConstellations.get(kotlin.random.Random.nextInt(0,fakeConstellations.size-1))
+        return fakeConstellations[kotlin.random.Random.nextInt(0,fakeConstellations.size-1)]
     }
 }
