@@ -27,7 +27,7 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
     }
     private fun createNewConstellation(star: Star){
         currentConstellation = Constellation(
-            ConstellationNames().getRandomConstellationName(),
+            ConstellationNames.getRandomConstellationName(),
             mutableListOf(star))
         constellations.add(currentConstellation)
     }

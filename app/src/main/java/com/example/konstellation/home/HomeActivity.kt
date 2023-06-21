@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.konstellation.KonstellationApp
 import com.example.konstellation.api.services.Test
 import com.example.konstellation.constellationGenerator.ConstellationNames
 import com.example.konstellation.ui.theme.ActivityScreen
@@ -89,7 +90,7 @@ fun DrawConstellation(NumberOfStars:Int){
 //        }
 //    }
     Box(modifier = Modifier.fillMaxSize()){
-        Text(text = ConstellationNames().getRandomConstellationName(), modifier = Modifier.align(
+        Text(text = ConstellationNames.getRandomConstellationName(), modifier = Modifier.align(
             Alignment.BottomCenter).padding(bottom = 20.dp), color = MaterialTheme.colorScheme.onPrimary, fontSize = 32.sp)
     }
 
