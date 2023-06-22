@@ -120,7 +120,7 @@ fun Background(){
                     brush = Brush.verticalGradient(
                         colorStops = arrayOf(
                             0.0f to primaryColor,
-                            0.5f to secondaryColor,
+                            0.6f to secondaryColor,
                             1.0f to tertiaryColor,
                         ),
                         startY = 0f,
