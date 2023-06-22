@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Email
@@ -52,7 +53,7 @@ fun TopButton(onClick: () -> Unit,modifier: Modifier=Modifier,text:String)
                 )
             {
                 Text(text = text,
-                    color= MaterialTheme.colorScheme.primary,
+                    color= MaterialTheme.colorScheme.onPrimaryContainer,
                     fontSize = 30.sp,
                     textAlign = TextAlign.Center)
             }
@@ -84,7 +85,7 @@ fun AppButton(modifier: Modifier,onClick: () -> Unit,text: String,imageVector: I
                             contentDescription = "Matrix")
                     }
                     Text(text = text,
-                        color= MaterialTheme.colorScheme.primary,
+                        color= MaterialTheme.colorScheme.onPrimary,
                         fontSize = 10.sp,
                         modifier = Modifier.align(Alignment.BottomCenter),
                         textAlign = TextAlign.Center)
