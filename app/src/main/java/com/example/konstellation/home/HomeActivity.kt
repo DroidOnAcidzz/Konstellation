@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,16 +28,16 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.konstellation.KonstellationApp
-import com.example.konstellation.api.services.Test
 import com.example.konstellation.constellationGenerator.ConstellationNames
 import com.example.konstellation.ui.theme.ActivityScreen
+import com.example.konstellation.ui.theme.AppBar
 import com.example.konstellation.ui.theme.AppTheme
+import com.example.konstellation.ui.theme.DisplayConstellation
 import com.example.konstellation.ui.theme.TopButton
-import kotlin.math.hypot
 
 class HomeActivity : ComponentActivity()
 {
+    lateinit var constellationNavController:NavController
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -45,16 +47,54 @@ class HomeActivity : ComponentActivity()
 @Composable
 fun HomeScreen() {
     val constellationController = rememberNavController()
+    val appBarController = rememberNavController()
+    var showAppBar by remember {
+        mutableStateOf(false)
+    }
     ActivityScreen()
-    TopButtons(constellationController)
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(bottom = 100.dp)){
-        NavHost(navController = constellationController, startDestination = "none" ){
-            composable ("none"){ None()}
-            composable ("constellation"){ DrawConstellation(NumberOfStars = 7) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier
+            .align(Alignment.End)
+            .padding(top = 20.dp)) {
+            if (!showAppBar)
+            TopButton(onClick =
+            {
+                showAppBar=true
+            }
+                ,text = "+",
+                modifier = Modifier.padding(horizontal = 10.dp))
+            TopButton(onClick = { /*TODO*/ },text = "S", modifier = Modifier.padding(end = 20.dp))
         }
     }
+    Box(Modifier.fillMaxSize()) {
+        Column() {
+            TopButtons(appBarController) {
+                showAppBar = true
+            }
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 150.dp)){
+                NavHost(navController = constellationController, startDestination = "none" ){
+                    composable ("none"){ None()}
+                    composable ("constellation"){ DisplayConstellation() }
+                }
+            }
+        }
+        Box(Modifier.align(Alignment.BottomCenter)) {
+            if (showAppBar)
+                AppBar(homeScreenNavController = appBarController, onStarAdded = {
+                    showAppBar=false
+                })
+//            NavHost(navController = appBarController ,startDestination = "none")
+//            {
+//                composable ("none"){ None()}
+//                composable ("appBar"){ AppBar(homeScreenNavController = constellationController) }
+//            }
+        }
+    }
+
+
+
 }
 
 @Composable
@@ -62,18 +102,8 @@ fun None() {
     Box(modifier = Modifier.fillMaxSize())
 }
 @Composable
-fun TopButtons(navController: NavController) {
+fun TopButtons(navController: NavController,onAppBarButtonClick:()->Unit) {
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier
-            .align(Alignment.End)
-            .padding(top = 20.dp)) {
-            TopButton(onClick = { navController.navigate("constellation") }
-                ,text = "+",
-                modifier = Modifier.padding(horizontal = 10.dp))
-            TopButton(onClick = { /*TODO*/ },text = "S", modifier = Modifier.padding(end = 20.dp))
-        }
-    }
 }
 
 @Composable
@@ -90,8 +120,11 @@ fun DrawConstellation(NumberOfStars:Int){
 //        }
 //    }
     Box(modifier = Modifier.fillMaxSize()){
-        Text(text = ConstellationNames.getRandomConstellationName(), modifier = Modifier.align(
-            Alignment.BottomCenter).padding(bottom = 20.dp), color = MaterialTheme.colorScheme.onPrimary, fontSize = 32.sp)
+        Text(text = ConstellationNames.getRandomConstellationName(), modifier = Modifier
+            .align(
+                Alignment.BottomCenter
+            )
+            .padding(bottom = 20.dp), color = MaterialTheme.colorScheme.onPrimary, fontSize = 32.sp)
     }
 
     Spacer(modifier = Modifier
@@ -118,7 +151,7 @@ fun DrawConstellation(NumberOfStars:Int){
 //
 //                previousOffset = nextOffset
 //                positions.add(previousOffset)
-            })
+        })
         }
 
 @Preview(showBackground = true)
