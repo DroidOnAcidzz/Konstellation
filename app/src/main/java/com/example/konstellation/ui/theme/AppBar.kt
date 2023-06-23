@@ -34,9 +34,11 @@ import com.example.konstellation.R
 import com.example.konstellation.constellationGenerator.dataClasses.StarApps
 
 @Composable
-fun AppBar(homeScreenNavController: NavController, onStarAdded:()->Unit) {
+fun AppBar(modifier: Modifier=Modifier,
+           homeScreenNavController: NavController= rememberNavController(),
+           onStarAdded:()->Unit) {
     val navController = rememberNavController()
-    Box()
+    Box(modifier = modifier)
     {
         AppTheme() {
             Column(
@@ -77,7 +79,7 @@ fun AppBar(homeScreenNavController: NavController, onStarAdded:()->Unit) {
     }
 }
 @Composable
-fun AppBarApps(navController:NavController,onAnyButtonClicked:()->Unit) {
+fun AppBarApps(navController:NavController, onStarAdded:()->Unit) {
     Row(modifier= Modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center)
@@ -85,10 +87,12 @@ fun AppBarApps(navController:NavController,onAnyButtonClicked:()->Unit) {
         for (star in StarApps.StarApps)
         {
             AppButton(modifier = Modifier,
-                onClick = {onAnyButtonClicked()
-                    star.onClick},
+                onStarAdded = {
+                            onStarAdded()
+                          },
                 text = star.name,
-                imageVector = ImageVector.vectorResource(id = star.imageResource))
+                imageVector = ImageVector.vectorResource(id = star.imageResource),
+                star = star)
         }
     }
 }
@@ -97,7 +101,7 @@ fun AppBarApps(navController:NavController,onAnyButtonClicked:()->Unit) {
 fun AppBarPreview() {
     ActivityScreen()
     Box(Modifier.fillMaxSize()) {
-        AppBar(homeScreenNavController = rememberNavController()) {}
+        AppBar(Modifier.align(Alignment.BottomCenter)) {}
     }
 
 }

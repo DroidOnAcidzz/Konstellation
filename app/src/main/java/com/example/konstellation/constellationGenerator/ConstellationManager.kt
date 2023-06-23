@@ -5,11 +5,13 @@ import com.example.konstellation.constellationGenerator.dataClasses.Constellatio
 import com.example.konstellation.constellationGenerator.dataClasses.Star
 
 import kotlin.math.hypot
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
     private val width: Double
     private val height: Double
-    lateinit var constellations:MutableList<Constellation>
+    val constellations:MutableList<Constellation> = mutableListOf()
     lateinit var currentConstellation:Constellation
     init {
         width = ScreenWidth
@@ -18,10 +20,13 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
     fun addStar(star: Star){
         if (constellations.size!=0)
         {
+            //star.position= findStarPosition(currentConstellation,star)
+            star.position= generateRandomPosition()
             currentConstellation.stars.add(star)
-            reArrangeConstellation(currentConstellation)
+            currentConstellation=reArrangeConstellation2(currentConstellation)
         }
         else{
+            star.position= generateRandomPosition()
             createNewConstellation(star)
         }
     }
@@ -59,16 +64,41 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
 //            return position
 //        }
 //    }
+    private fun reArrangeConstellation2(constellation: Constellation):Constellation
+    {
+        val radius=60.0
+        val tempConstellation = constellation
+        while (true)
+        {
+            var foundPositions=true
+            for (star in constellation.stars)
+            {
+                for (tempStar in tempConstellation.stars)
+                {
+                    if (tempStar!=star)
+                    {
+                        if (distanceBetweenStars(tempStar.position,star.position)<radius)
+                        {
+                            tempStar.position=generateRandomPosition()
+                            foundPositions=false
+                        }
+                    }
+                }
+            }
+            if (foundPositions) {
+                return tempConstellation
+            }
+        }
+    }
     private fun reArrangeConstellation(constellation: Constellation){
         var isStarsSpread = false
         val minimumDistance = 60
-        val starsTooClose:MutableList<Star> = mutableListOf<Star>()
+        val starsTooClose:MutableList<Star> = mutableListOf()
         while (!isStarsSpread) {
             starsTooClose.clear()
             for (star in constellation.stars)
             {
                 for (starToCompare in constellation.stars) {
-                    var hasStarClose = false
                     if (star!=starToCompare)
                         if (distanceBetweenStars(star.position,starToCompare.position)<minimumDistance)
                         {
@@ -88,6 +118,25 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
             }
             if (starsTooClose.isEmpty())
                 isStarsSpread=true
+        }
+    }
+    private fun findStarPosition(constellation: Constellation,star: Star):Offset{
+        val radius = 60.0
+        while(true)
+        {
+            val tempPosition=generateRandomPosition()
+            val isColliding = constellation.stars.any {
+                val distance = sqrt((star.position.x.toDouble() - tempPosition.x).pow(2.0) + (star.position.y.toDouble() - tempPosition.y).pow(
+                    2.0
+                )
+                )
+                distance < radius + radius
+            }
+            if (!isColliding) {
+                star.position=tempPosition
+                return star.position   // Found a non-colliding position
+            }
+
         }
     }
     private fun distanceBetweenStars(pos1: Offset, pos2: Offset):Double{

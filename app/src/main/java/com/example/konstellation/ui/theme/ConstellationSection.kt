@@ -2,6 +2,7 @@ package com.example.konstellation.ui.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,8 +37,10 @@ fun DisplayConstellation() {
 @Composable
 fun Star(star: Star) {
     AppTheme() {
-        Box(Modifier.size(65.dp,75.dp)
-            .offset(star.position.x.dp,star.position.y.dp))
+        Box(
+            Modifier
+                .size(65.dp, 75.dp)
+                .offset(star.position.x.dp, star.position.y.dp))
         {
             IconButton(
                 modifier= Modifier
@@ -49,7 +53,7 @@ fun Star(star: Star) {
                         color = MaterialTheme.colorScheme.onPrimary,
                         shape = CircleShape
                     ),
-                onClick = star.onClick,
+                onClick = {},
             )
             {
                 Icon(

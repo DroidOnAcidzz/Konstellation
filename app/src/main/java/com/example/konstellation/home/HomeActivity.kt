@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,7 +30,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.konstellation.KonstellationApp
+import com.example.konstellation.R
+import com.example.konstellation.constellationGenerator.ConstellationManager
 import com.example.konstellation.constellationGenerator.ConstellationNames
+import com.example.konstellation.constellationGenerator.dataClasses.Star
+import com.example.konstellation.constellationGenerator.dataClasses.StarType
 import com.example.konstellation.ui.theme.ActivityScreen
 import com.example.konstellation.ui.theme.AppBar
 import com.example.konstellation.ui.theme.AppTheme
@@ -56,13 +63,17 @@ fun HomeScreen() {
         Row(modifier = Modifier
             .align(Alignment.End)
             .padding(top = 20.dp)) {
-            if (!showAppBar)
+            var appButtonAlpha=1.0f
+            appButtonAlpha = if (!showAppBar) 1.0f else 0.5f
             TopButton(onClick =
             {
-                showAppBar=true
+                if (!showAppBar){
+                    showAppBar=true
+                }
+
             }
                 ,text = "+",
-                modifier = Modifier.padding(horizontal = 10.dp))
+                modifier = Modifier.padding(horizontal = 10.dp).alpha(appButtonAlpha))
             TopButton(onClick = { /*TODO*/ },text = "S", modifier = Modifier.padding(end = 20.dp))
         }
     }
@@ -74,6 +85,7 @@ fun HomeScreen() {
             Box(modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = 150.dp)){
+
                 NavHost(navController = constellationController, startDestination = "none" ){
                     composable ("none"){ None()}
                     composable ("constellation"){ DisplayConstellation() }
@@ -82,9 +94,10 @@ fun HomeScreen() {
         }
         Box(Modifier.align(Alignment.BottomCenter)) {
             if (showAppBar)
-                AppBar(homeScreenNavController = appBarController, onStarAdded = {
-                    showAppBar=false
-                })
+                AppBar(homeScreenNavController = appBarController) {
+                    showAppBar = false
+                    constellationController.navigate("constellation")
+                }
 //            NavHost(navController = appBarController ,startDestination = "none")
 //            {
 //                composable ("none"){ None()}
@@ -158,6 +171,6 @@ fun DrawConstellation(NumberOfStars:Int){
 @Composable
 fun GreetingPreview() {
     AppTheme() {
-        HomeScreen()
+        //HomeScreen()
     }
 }
