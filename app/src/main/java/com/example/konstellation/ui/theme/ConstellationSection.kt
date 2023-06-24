@@ -1,5 +1,6 @@
 package com.example.konstellation.ui.theme
 
+import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -28,10 +32,39 @@ import com.example.konstellation.constellationGenerator.dataClasses.Star
 
 @Composable
 fun DisplayConstellation() {
-    for (star in KonstellationApp.constellationManager.currentConstellation.stars)
-    {
-       Star(star = star)
+    Box(Modifier
+        .fillMaxSize()
+        .drawBehind {
+        var previousOffset: Offset = KonstellationApp.constellationManager.currentConstellation.stars[0].position
+        var nextOffset:Offset
+        val density = Resources.getSystem().displayMetrics.density
+        val starCenterOffset = 30*density
+        for (star in KonstellationApp.constellationManager.currentConstellation.stars)
+        {
+            if (star!=KonstellationApp.constellationManager.currentConstellation.stars[0]) {
+                nextOffset = star.position
+                drawLine(color = Color.White,
+                    start = Offset((previousOffset.x * density)+starCenterOffset,
+                        (previousOffset.y * density)+starCenterOffset),
+                    end = Offset((nextOffset.x * density)+starCenterOffset,(nextOffset.y * density)+starCenterOffset),
+                strokeWidth = 4f)
+                previousOffset = nextOffset
+            }
+        }
+    }) {
+        Text (modifier = Modifier.fillMaxSize()
+            .align(Alignment.TopCenter)
+            .padding(top =100.dp),
+            textAlign = TextAlign.Center,
+            text = KonstellationApp.constellationManager.currentConstellation.name,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 32.sp)
+        for (star in KonstellationApp.constellationManager.currentConstellation.stars)
+        {
+            Star(star = star)
+        }
     }
+
 }
 
 @Composable
