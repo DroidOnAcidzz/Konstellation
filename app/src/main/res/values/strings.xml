@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Konstellation</string>
     <string name="apps_title_app_bar">APPS</string>
+    <string name="accounts_add_account">Add Fediverse Account</string>
+    <string name="accounts_account_name">Account Name/Email</string>
+    <string name="accounts_account_name_field">Name/Email</string>
+    <string name="accounts_account_password">Password</string>
+    <string name="accounts_account_login">Login</string>
+    <string name="accounts_account_instance">Instance URL</string>
+    <string name="accounts_account_url">URL</string>
+    <string name="accounts_account_token">Token</string>
 </resources>

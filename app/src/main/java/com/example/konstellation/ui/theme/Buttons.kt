@@ -54,48 +54,7 @@ fun TopButton(onClick: () -> Unit,modifier: Modifier=Modifier,text:String,alpha:
     }
 }
 
-@Composable
-fun AppButton(modifier: Modifier, onStarAdded: () -> Unit, text: String, imageVector: ImageVector, star: Star) {
-    Box(modifier = modifier) {
-        AppTheme() {
-                Box(Modifier.size(65.dp,75.dp)) {
-                    IconButton(
-                        modifier= Modifier
-                            .size(60.dp, 60.dp)
-                            .alpha(0.85f)
-                            .padding(2.dp)
-                            .align(Alignment.TopCenter)
-                            .shadow(2.dp, CircleShape)
-                            .background(
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                shape = CircleShape
-                            ),
-                        onClick = {
-                                    val newStar = Star("",0,StarType.MATRIX, Offset(0.0F, 0.0F))
-                                    newStar.name=star.name
-                                    newStar.imageResource=star.imageResource
-                                    newStar.type=star.type
-                                    KonstellationApp.constellationManager.addStar(newStar)
-                                    onStarAdded()
-                                  },
-                    )
-                    {
-                        Icon(
-                            imageVector = imageVector,
-                            contentDescription = "Matrix")
-                    }
-                    Text(text = text,
-                        color= MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 10.sp,
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                        textAlign = TextAlign.Center)
-                }
 
-
-            }
-    }
-
-}
 @Preview
 @Composable
 fun ButtonsPreview(){
