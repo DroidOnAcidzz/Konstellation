@@ -3,6 +3,7 @@ package com.example.konstellation.constellationGenerator
 import androidx.compose.ui.geometry.Offset
 import com.example.konstellation.constellationGenerator.dataClasses.Constellation
 import com.example.konstellation.constellationGenerator.dataClasses.Star
+import com.example.konstellation.constellationGenerator.dataClasses.StarType
 
 import kotlin.math.hypot
 import kotlin.math.pow
@@ -18,16 +19,20 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
         height = ScreenHeight
     }
     fun addStar(star: Star){
+        val newStar = Star("",0, StarType.MATRIX, Offset(0.0F, 0.0F))
+        newStar.name=star.name
+        newStar.imageResource=star.imageResource
+        newStar.type=star.type
         if (constellations.size!=0)
         {
             //star.position= findStarPosition(currentConstellation,star)
             star.position= generateRandomPosition()
-            currentConstellation.stars.add(star)
+            currentConstellation.stars.add(newStar)
             currentConstellation=reArrangeConstellation2(currentConstellation)
         }
         else{
             star.position= generateRandomPosition()
-            createNewConstellation(star)
+            createNewConstellation(newStar)
         }
     }
     private fun createNewConstellation(star: Star){

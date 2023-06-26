@@ -8,7 +8,6 @@ import com.example.konstellation.R
 class StarApps {
     companion object
     {
-
         val Matrix:Star = Star(
             name = "Matrix",
             imageResource= R.drawable.matrix_icon,
@@ -35,6 +34,17 @@ class StarApps {
             type = StarType.CONSTELLATION,
             position = Offset(0.0F, 0.0F))
         val StarApps:List<Star> = listOf(Matrix, Mastodon, Peertube, Mixed, Constellation)
+        fun getStarAppByType(type:StarType):Star
+        {
+            for (app in StarApps)
+            {
+                if (app.type==type)
+                {
+                    return app
+                }
+            }
+            return Matrix
+        }
     }
 
 }

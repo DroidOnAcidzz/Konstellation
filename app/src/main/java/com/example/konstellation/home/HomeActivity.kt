@@ -44,7 +44,6 @@ import com.example.konstellation.ui.theme.TopButton
 
 class HomeActivity : ComponentActivity()
 {
-    lateinit var constellationNavController:NavController
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -55,6 +54,7 @@ class HomeActivity : ComponentActivity()
 fun HomeScreen() {
     val constellationController = rememberNavController()
     val appBarController = rememberNavController()
+    val accountNavController = rememberNavController()
     var showAppBar by remember {
         mutableStateOf(false)
     }
@@ -73,104 +73,34 @@ fun HomeScreen() {
 
             }
                 ,text = "+",
-                modifier = Modifier.padding(horizontal = 10.dp).alpha(appButtonAlpha))
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .alpha(appButtonAlpha))
             TopButton(onClick = { /*TODO*/ },text = "S", modifier = Modifier.padding(end = 20.dp))
         }
     }
     Box(Modifier.fillMaxSize()) {
-        Column() {
-            TopButtons(appBarController) {
-                showAppBar = true
-            }
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 150.dp)){
-
                 NavHost(navController = constellationController, startDestination = "none" ){
                     composable ("none"){ None()}
                     composable ("constellation"){ DisplayConstellation() }
-                }
+        }
+        if (showAppBar)
+            AppBar(accountsNavController = appBarController) {
+                showAppBar = false
+                constellationController.navigate("constellation")
             }
-        }
-        Box(Modifier.align(Alignment.BottomCenter)) {
-            if (showAppBar)
-                AppBar(homeScreenNavController = appBarController) {
-                    showAppBar = false
-                    constellationController.navigate("constellation")
-                }
-//            NavHost(navController = appBarController ,startDestination = "none")
-//            {
-//                composable ("none"){ None()}
-//                composable ("appBar"){ AppBar(homeScreenNavController = constellationController) }
-//            }
-        }
     }
-
-
-
 }
 
 @Composable
 fun None() {
     Box(modifier = Modifier.fillMaxSize())
 }
-@Composable
-fun TopButtons(navController: NavController,onAppBarButtonClick:()->Unit) {
-
-}
-
-@Composable
-fun DrawConstellation(NumberOfStars:Int){
-//    Box(modifier = Modifier
-//        .fillMaxSize()) {
-//        Button(colors= ButtonDefaults.buttonColors(Color.White,Color.Black,Color.Black,Color.Black) ,shape = CircleShape ,modifier = Modifier
-//            .offset(50.dp, 300.dp)
-//            .drawWithContent {
-//                drawCircle(color = Color.White, radius = 100f)
-//            }, onClick = {}) {
-//            Text(text = "test",
-//                fontSize = 20.sp)
-//        }
-//    }
-    Box(modifier = Modifier.fillMaxSize()){
-        Text(text = ConstellationNames.getRandomConstellationName(), modifier = Modifier
-            .align(
-                Alignment.BottomCenter
-            )
-            .padding(bottom = 20.dp), color = MaterialTheme.colorScheme.onPrimary, fontSize = 32.sp)
-    }
-
-    Spacer(modifier = Modifier
-        .fillMaxSize()
-        .alpha(0.5f)
-        .drawBehind {
-//            val positions: MutableList<Offset> = mutableListOf()
-//            val width = size.width.toDouble()
-//            val height = size.height.toDouble()
-//            val circleRadius = 150f
-//            var previousOffset = generateRandomPosition(width, height)
-//            drawCircle(color = Color.White, center = previousOffset, radius = circleRadius)
-//            positions.add(previousOffset)
-//            for (i in 1..NumberOfStars - 1) {
-//                val nextOffset =
-//                    checkDistanceBetweenStars(positions, circleRadius * 2.toDouble(), width, height)
-//                drawCircle(color = Color.White, center = nextOffset, radius = circleRadius)
-//                drawLine(
-//                    strokeWidth = 5f,
-//                    color = Color.White,
-//                    start = previousOffset,
-//                    end = nextOffset
-//                )
-//
-//                previousOffset = nextOffset
-//                positions.add(previousOffset)
-        })
-        }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     AppTheme() {
-        //HomeScreen()
+        HomeScreen()
     }
 }
