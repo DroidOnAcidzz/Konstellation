@@ -1,8 +1,9 @@
 package com.example.konstellation.constellationGenerator
 
 import androidx.compose.ui.geometry.Offset
+import com.example.konstellation.apps.Star
 import com.example.konstellation.constellationGenerator.dataClasses.Constellation
-import com.example.konstellation.constellationGenerator.dataClasses.Star
+import com.example.konstellation.constellationGenerator.dataClasses.DataStar
 import com.example.konstellation.constellationGenerator.dataClasses.StarType
 
 import kotlin.math.hypot
@@ -18,11 +19,12 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
         width = ScreenWidth
         height = ScreenHeight
     }
-    fun addStar(star: Star){
-        val newStar = Star("",0, StarType.MATRIX, Offset(0.0F, 0.0F))
+    fun addStar(star: DataStar){
+        val newStar = DataStar("",0, StarType.MATRIX, Offset(0.0F, 0.0F), Star())
         newStar.name=star.name
         newStar.imageResource=star.imageResource
         newStar.type=star.type
+     //   newStar.login=star.login
         if (constellations.size!=0)
         {
             //star.position= findStarPosition(currentConstellation,star)
@@ -35,7 +37,7 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
             createNewConstellation(newStar)
         }
     }
-    private fun createNewConstellation(star: Star){
+    private fun createNewConstellation(star: DataStar){
         currentConstellation = Constellation(
             ConstellationNames.getRandomConstellationName(),
             mutableListOf(star))
@@ -98,7 +100,7 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
     private fun reArrangeConstellation(constellation: Constellation){
         var isStarsSpread = false
         val minimumDistance = 60
-        val starsTooClose:MutableList<Star> = mutableListOf()
+        val starsTooClose:MutableList<DataStar> = mutableListOf()
         while (!isStarsSpread) {
             starsTooClose.clear()
             for (star in constellation.stars)
@@ -125,7 +127,7 @@ class ConstellationManager(ScreenWidth: Double,ScreenHeight: Double) {
                 isStarsSpread=true
         }
     }
-    private fun findStarPosition(constellation: Constellation,star: Star):Offset{
+    private fun findStarPosition(constellation: Constellation,star: DataStar):Offset{
         val radius = 60.0
         while(true)
         {

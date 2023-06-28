@@ -43,18 +43,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.konstellation.R
-import com.example.konstellation.constellationGenerator.dataClasses.Star
+import com.example.konstellation.constellationGenerator.dataClasses.DataStar
 import com.example.konstellation.constellationGenerator.dataClasses.StarApps
 import com.example.konstellation.constellationGenerator.dataClasses.StarType
-import com.example.konstellation.home.None
+import com.example.konstellation.activities.None
 
 @Composable
 fun AppBar(modifier: Modifier=Modifier,
            accountsNavController: NavController = rememberNavController(),
            onStarAdded:()->Unit) {
-    val navController = rememberNavController()
+    val appBarNavController = rememberNavController()
     val accountFormNavController = rememberNavController()
-    var isAddingStar by remember { mutableStateOf(false)}
+    var appBarTitle= remember {
+        mutableStateOf(R.string.apps_title_app_bar)
+    }
+    var isAddingStar by remember { mutableStateOf(true)}
     val onAppBarStarAdded:()->Unit={
         isAddingStar=false
         onStarAdded()
@@ -69,13 +72,15 @@ fun AppBar(modifier: Modifier=Modifier,
                     startDestination = "none",
                     Modifier.align(Alignment.Center)
                 ) {
-                    composable("none"){ None()}
-                    composable ("test") { AccountsForm(accountsNavController,StarType.MATRIX)}
+                    composable("none") {
+                        None()
+                    }
                     composable("accountForm/{starType}",
-                        arguments = listOf(navArgument("starType"){type = NavType.IntType}))
+                        arguments = listOf(navArgument("starType") { type = NavType.IntType })
+                    )
                     {
-                        val type = it.arguments?.getInt("starType")?:0
-                        AccountsForm(accountFormNavController,StarType.values()[type])
+                        val type = it.arguments?.getInt("starType") ?: 0
+                        AccountsForm(accountFormNavController, StarType.values()[type])
                     }
                 }
                 Box(Modifier.align(Alignment.BottomCenter))
@@ -98,7 +103,7 @@ fun AppBar(modifier: Modifier=Modifier,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(5.dp),
-                            text = stringResource(R.string.apps_title_app_bar),
+                            text = stringResource(appBarTitle.value),
                             color = MaterialTheme.colorScheme.onPrimary,
                             textAlign = TextAlign.Center
                         )
@@ -109,18 +114,31 @@ fun AppBar(modifier: Modifier=Modifier,
                                 .shadow(2.dp)
                                 .background(color = MaterialTheme.colorScheme.onPrimaryContainer)
                         )
-                        NavHost(navController = navController, startDestination = "apps") {
-                            composable("apps") { AppBarApps(onAddingStar, accountFormNavController) }
+                        NavHost(navController = appBarNavController, startDestination = "apps") {
+                            composable("apps") {
+                                AppBarApps(
+                                    onAddingStar,
+                                    accountFormNavController,
+                                    appBarNavController
+                                )
+                            }
+                            composable("subType/{starType}",
+                                arguments = listOf(navArgument("starType") { type = NavType.IntType })
+                            )
+                            {
+                                appBarTitle.value=R.string.apps_title_subType_bar
+                                val type = it.arguments?.getInt("starType") ?: 0
+                                AppBarSubTypes(StarType.values()[type],accountFormNavController, )
+                            }
                         }
                     }
 
                 }
             }
-        }
-
+            }
     }
 @Composable
-fun AppBarApps(onAddingStar:()->Unit,accountsNavController: NavController= rememberNavController()) {
+fun AppBarApps(onAddingStar:()->Unit,accountsNavController: NavController,appBarNavController: NavController) {
     Row(modifier= Modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center)
@@ -132,15 +150,84 @@ fun AppBarApps(onAddingStar:()->Unit,accountsNavController: NavController= remem
                             onAddingStar()
                           },
                 star = star,
-            accountFormNavController = accountsNavController)
+                appBarNavController= appBarNavController,
+                accountFormNavController = accountsNavController)
+        }
+    }
+}
+@Composable
+fun AppBarSubTypes(starType: StarType,accountsNavController: NavController= rememberNavController()) {
+    Row(modifier= Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center)
+    {
+        val star:DataStar =StarApps.getStarAppByType(starType)
+        for (subtype in star.starClass!!.subTypes)
+        {
+            SubTypeButton(modifier = Modifier,
+                subTypeIndex= star.starClass!!.subTypes.indexOf(subtype),
+                star = star,
+                accountFormNavController = accountsNavController)
         }
     }
 }
 @Composable
 fun AppButton(modifier: Modifier,
               onAddingStar: () -> Unit,
-              star: Star,
+              star: DataStar,
+              appBarNavController: NavController,
               accountFormNavController: NavController) {
+    Box(modifier = modifier) {
+        AppTheme() {
+            Box(Modifier.size(65.dp,75.dp)) {
+                IconButton(
+                    modifier= Modifier
+                        .size(60.dp, 60.dp)
+                        .alpha(0.85f)
+                        .padding(2.dp)
+                        .align(Alignment.TopCenter)
+                        .shadow(2.dp, CircleShape)
+                        .background(
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            shape = CircleShape
+                        ),
+                    onClick = {
+                        if (star.starClass.subTypes.isEmpty())
+                            accountFormNavController.navigate("accountForm/"+star.type.ordinal)
+                        else{
+                            appBarNavController.navigate("subType/"+star.type.ordinal)
+                        }
+//                        val newStar = Star("",0, StarType.MATRIX, Offset(0.0F, 0.0F))
+//                        newStar.name=star.name
+//                        newStar.imageResource=star.imageResource
+//                        newStar.type=star.type
+//                        KonstellationApp.constellationManager.addStar(newStar)
+                        onAddingStar()
+
+                    },
+                )
+                {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = star.imageResource),
+                        contentDescription = "Matrix")
+                }
+                Text(text = star.name,
+                    color= MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 10.sp,
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    textAlign = TextAlign.Center)
+            }
+
+
+        }
+    }
+
+}
+@Composable
+fun SubTypeButton(modifier: Modifier,
+                 subTypeIndex:Int,
+                  star: DataStar,
+                 accountFormNavController: NavController) {
     Box(modifier = modifier) {
         AppTheme() {
             Box(Modifier.size(65.dp,75.dp)) {
@@ -162,16 +249,14 @@ fun AppButton(modifier: Modifier,
 //                        newStar.imageResource=star.imageResource
 //                        newStar.type=star.type
 //                        KonstellationApp.constellationManager.addStar(newStar)
-                        onAddingStar()
-
                     },
                 )
                 {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = star.imageResource),
+                        imageVector = ImageVector.vectorResource(id = star.starClass!!.subTypes[subTypeIndex].imageResource),
                         contentDescription = "Matrix")
                 }
-                Text(text = star.name,
+                Text(text = star.starClass!!.subTypes[subTypeIndex].name,
                     color= MaterialTheme.colorScheme.onPrimary,
                     fontSize = 10.sp,
                     modifier = Modifier.align(Alignment.BottomCenter),

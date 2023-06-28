@@ -13,16 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.konstellation.R
-import com.example.konstellation.constellationGenerator.dataClasses.Star
-import com.example.konstellation.constellationGenerator.dataClasses.StarType
 
 @Composable
 fun TopButton(onClick: () -> Unit,modifier: Modifier=Modifier,text:String,alpha:Float=1.0f)
